@@ -1,201 +1,208 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Note de Frais — BTS</title>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Syne:wght@700;800&display=swap"
+    rel="stylesheet" />
   <link rel="stylesheet" href="css/style.css" />
 </head>
+
 <body>
 
-<!-- HEADER -->
-<header>
-  <div class="logo">
-    <span class="logo-dot"></span>
-    NoteFrais
-  </div>
-  <div class="header-actions">
-    <button class="btn btn-outline" onclick="openExportModal()">⬇ Exporter</button>
-    <button class="btn btn-primary" onclick="openAddModal()">+ Ajouter</button>
-  </div>
-</header>
+  <!-- HEADER -->
+  <header>
+    <div class="logo">
+      <span class="logo-dot"></span>
+      NoteFrais
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-outline" onclick="openExportModal()">⬇ Exporter</button>
+      <button class="btn btn-primary" onclick="openAddModal()">+ Ajouter</button>
+    </div>
+  </header>
 
-<div class="container">
+  <div class="container">
 
-  <!-- STATS -->
-  <div class="stats-grid" id="statsGrid">
-    <div class="stat-card accent">
-      <span class="stat-label">Total des frais</span>
-      <span class="stat-value" id="statTotal">0,00 €</span>
-    </div>
-    <div class="stat-card success">
-      <span class="stat-label">Validés</span>
-      <span class="stat-value" id="statValidated">0,00 €</span>
-    </div>
-    <div class="stat-card warning">
-      <span class="stat-label">En attente</span>
-      <span class="stat-value" id="statPending">0,00 €</span>
-    </div>
-    <div class="stat-card danger">
-      <span class="stat-label">Nb. de frais</span>
-      <span class="stat-value" id="statCount">0</span>
-    </div>
-  </div>
-
-  <!-- MAIN CARD -->
-  <div class="card">
-    <div class="tabs" style="padding: 0 1.5rem; margin-bottom: 0;">
-      <button class="tab-btn active" onclick="switchTab('liste', this)">Liste des frais</button>
-      <button class="tab-btn" onclick="switchTab('recap', this)">Récapitulatif</button>
-    </div>
-
-    <!-- TAB LISTE -->
-    <div class="tab-content active" id="tab-liste">
-      <div class="card-header">
-        <div class="filters">
-          <select class="filter-select" id="filterCategorie" onchange="renderTable()">
-            <option value="">Toutes catégories</option>
-            <option value="transport">Transport</option>
-            <option value="repas">Repas</option>
-            <option value="hebergement">Hébergement</option>
-            <option value="materiel">Matériel</option>
-            <option value="autre">Autre</option>
-          </select>
-          <select class="filter-select" id="filterStatut" onchange="renderTable()">
-            <option value="">Tous statuts</option>
-            <option value="pending">En attente</option>
-            <option value="validated">Validé</option>
-            <option value="rejected">Refusé</option>
-          </select>
-          <input type="text" id="searchInput" placeholder="🔍 Rechercher..." style="border-radius:20px; font-size:13px; padding:7px 14px; width:180px;" oninput="renderTable()" />
-        </div>
-        <div class="export-bar">
-          <button class="btn btn-outline btn-sm" onclick="clearFilters()">Effacer filtres</button>
-        </div>
+    <!-- STATS -->
+    <div class="stats-grid" id="statsGrid">
+      <div class="stat-card accent">
+        <span class="stat-label">Total des frais</span>
+        <span class="stat-value" id="statTotal">0,00 €</span>
       </div>
-
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th onclick="sortBy('date')" style="cursor:pointer">Date ↕</th>
-              <th>Description</th>
-              <th onclick="sortBy('categorie')" style="cursor:pointer">Catégorie ↕</th>
-              <th>Justificatif</th>
-              <th onclick="sortBy('montant')" style="cursor:pointer">Montant ↕</th>
-              <th>Statut</th>
-              <th style="text-align:right">Actions</th>
-            </tr>
-          </thead>
-          <tbody id="tableBody"></tbody>
-        </table>
-        <div class="empty-state" id="emptyState" style="display:none">
-          <div class="icon">📋</div>
-          <p>Aucune note de frais trouvée.</p>
-          <p>Cliquez sur <strong>+ Ajouter</strong> pour commencer.</p>
-        </div>
+      <div class="stat-card success">
+        <span class="stat-label">Validés</span>
+        <span class="stat-value" id="statValidated">0,00 €</span>
+      </div>
+      <div class="stat-card warning">
+        <span class="stat-label">En attente</span>
+        <span class="stat-value" id="statPending">0,00 €</span>
+      </div>
+      <div class="stat-card danger">
+        <span class="stat-label">Nb. de frais</span>
+        <span class="stat-value" id="statCount">0</span>
       </div>
     </div>
 
-    <!-- TAB RECAP -->
-    <div class="tab-content" id="tab-recap">
-      <div class="card-body">
-        <div id="recapContent"></div>
+    <!-- MAIN CARD -->
+    <div class="card">
+      <div class="tabs" style="padding: 0 1.5rem; margin-bottom: 0;">
+        <button class="tab-btn active" onclick="switchTab('liste', this)">Liste des frais</button>
+        <button class="tab-btn" onclick="switchTab('recap', this)">Récapitulatif</button>
+      </div>
+
+      <!-- TAB LISTE -->
+      <div class="tab-content active" id="tab-liste">
+        <div class="card-header">
+          <div class="filters">
+            <select class="filter-select" id="filterCategorie" onchange="renderTable()">
+              <option value="">Toutes catégories</option>
+              <option value="transport">Transport</option>
+              <option value="repas">Repas</option>
+              <option value="hebergement">Hébergement</option>
+              <option value="materiel">Matériel</option>
+              <option value="autre">Autre</option>
+            </select>
+            <select class="filter-select" id="filterStatut" onchange="renderTable()">
+              <option value="">Tous statuts</option>
+              <option value="pending">En attente</option>
+              <option value="validated">Validé</option>
+              <option value="rejected">Refusé</option>
+            </select>
+            <input type="text" id="searchInput" placeholder="🔍 Rechercher..."
+              style="border-radius:20px; font-size:13px; padding:7px 14px; width:180px;" oninput="renderTable()" />
+          </div>
+          <div class="export-bar">
+            <button class="btn btn-outline btn-sm" onclick="clearFilters()">Effacer filtres</button>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th onclick="sortBy('date')" style="cursor:pointer">Date ↕</th>
+                <th>Description</th>
+                <th onclick="sortBy('categorie')" style="cursor:pointer">Catégorie ↕</th>
+                <th>Justificatif</th>
+                <th onclick="sortBy('montant')" style="cursor:pointer">Montant ↕</th>
+                <th>Statut</th>
+                <th style="text-align:right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+          </table>
+          <div class="empty-state" id="emptyState" style="display:none">
+            <div class="icon">📋</div>
+            <p>Aucune note de frais trouvée.</p>
+            <p>Cliquez sur <strong>+ Ajouter</strong> pour commencer.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB RECAP -->
+      <div class="tab-content" id="tab-recap">
+        <div class="card-body">
+          <div id="recapContent"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- MODAL AJOUT/EDITION -->
+  <div class="modal-overlay" id="addModal">
+    <div class="modal">
+      <div class="modal-header">
+        <span class="card-title" id="modalTitle">Ajouter une dépense</span>
+        <button class="close-btn" onclick="closeModal('addModal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="inputDate">Date *</label>
+            <input type="date" id="inputDate" required />
+          </div>
+          <div class="form-group">
+            <label for="inputCategorie">Catégorie *</label>
+            <select id="inputCategorie" required>
+              <option value="">Sélectionner...</option>
+              <option value="transport">Transport</option>
+              <option value="repas">Repas</option>
+              <option value="hebergement">Hébergement</option>
+              <option value="materiel">Matériel</option>
+              <option value="autre">Autre</option>
+            </select>
+          </div>
+          <div class="form-group full">
+            <label for="inputDescription">Description *</label>
+            <input type="text" id="inputDescription" placeholder="Ex: Billet de train Paris-Lyon" required />
+          </div>
+          <div class="form-group">
+            <label for="inputMontant">Montant (€) *</label>
+            <input type="number" id="inputMontant" min="0" step="0.01" placeholder="0.00" required />
+          </div>
+          <div class="form-group">
+            <label for="inputJustificatif">N° Justificatif</label>
+            <input type="text" id="inputJustificatif" placeholder="Ex: FACT-001" />
+          </div>
+          <div class="form-group full">
+            <label for="inputNotes">Notes complémentaires</label>
+            <textarea id="inputNotes" placeholder="Informations supplémentaires..."></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal('addModal')">Annuler</button>
+        <button class="btn btn-primary" onclick="saveEntry()">💾 Enregistrer</button>
       </div>
     </div>
   </div>
 
-</div>
-
-<!-- MODAL AJOUT/EDITION -->
-<div class="modal-overlay" id="addModal">
-  <div class="modal">
-    <div class="modal-header">
-      <span class="card-title" id="modalTitle">Ajouter une dépense</span>
-      <button class="close-btn" onclick="closeModal('addModal')">✕</button>
-    </div>
-    <div class="modal-body">
-      <div class="form-grid">
-        <div class="form-group">
-          <label for="inputDate">Date *</label>
-          <input type="date" id="inputDate" required />
-        </div>
-        <div class="form-group">
-          <label for="inputCategorie">Catégorie *</label>
-          <select id="inputCategorie" required>
-            <option value="">Sélectionner...</option>
-            <option value="transport">Transport</option>
-            <option value="repas">Repas</option>
-            <option value="hebergement">Hébergement</option>
-            <option value="materiel">Matériel</option>
-            <option value="autre">Autre</option>
-          </select>
-        </div>
-        <div class="form-group full">
-          <label for="inputDescription">Description *</label>
-          <input type="text" id="inputDescription" placeholder="Ex: Billet de train Paris-Lyon" required />
-        </div>
-        <div class="form-group">
-          <label for="inputMontant">Montant (€) *</label>
-          <input type="number" id="inputMontant" min="0" step="0.01" placeholder="0.00" required />
-        </div>
-        <div class="form-group">
-          <label for="inputJustificatif">N° Justificatif</label>
-          <input type="text" id="inputJustificatif" placeholder="Ex: FACT-001" />
-        </div>
-        <div class="form-group full">
-          <label for="inputNotes">Notes complémentaires</label>
-          <textarea id="inputNotes" placeholder="Informations supplémentaires..."></textarea>
+  <!-- MODAL EXPORT -->
+  <div class="modal-overlay" id="exportModal">
+    <div class="modal" style="max-width:400px">
+      <div class="modal-header">
+        <span class="card-title">Exporter les données</span>
+        <button class="close-btn" onclick="closeModal('exportModal')">✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="color:var(--text-muted); font-size:14px; margin-bottom:1rem;">Choisissez le format d'export pour vos
+          notes de frais.</p>
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <button class="btn btn-outline" onclick="exportCSV()" style="justify-content:flex-start; gap:12px;">
+            <span style="font-size:1.2rem">📊</span> Exporter en CSV
+          </button>
+          <button class="btn btn-outline" onclick="exportJSON()" style="justify-content:flex-start; gap:12px;">
+            <span style="font-size:1.2rem">📄</span> Exporter en JSON
+          </button>
+          <button class="btn btn-outline" onclick="printPage()" style="justify-content:flex-start; gap:12px;">
+            <span style="font-size:1.2rem">🖨️</span> Imprimer / PDF
+          </button>
         </div>
       </div>
     </div>
-    <div class="modal-footer">
-      <button class="btn btn-outline" onclick="closeModal('addModal')">Annuler</button>
-      <button class="btn btn-primary" onclick="saveEntry()">💾 Enregistrer</button>
-    </div>
   </div>
-</div>
 
-<!-- MODAL EXPORT -->
-<div class="modal-overlay" id="exportModal">
-  <div class="modal" style="max-width:400px">
-    <div class="modal-header">
-      <span class="card-title">Exporter les données</span>
-      <button class="close-btn" onclick="closeModal('exportModal')">✕</button>
-    </div>
-    <div class="modal-body">
-      <p style="color:var(--text-muted); font-size:14px; margin-bottom:1rem;">Choisissez le format d'export pour vos notes de frais.</p>
-      <div style="display:flex; flex-direction:column; gap:10px;">
-        <button class="btn btn-outline" onclick="exportCSV()" style="justify-content:flex-start; gap:12px;">
-          <span style="font-size:1.2rem">📊</span> Exporter en CSV
-        </button>
-        <button class="btn btn-outline" onclick="exportJSON()" style="justify-content:flex-start; gap:12px;">
-          <span style="font-size:1.2rem">📄</span> Exporter en JSON
-        </button>
-        <button class="btn btn-outline" onclick="printPage()" style="justify-content:flex-start; gap:12px;">
-          <span style="font-size:1.2rem">🖨️</span> Imprimer / PDF
-        </button>
+  <!-- MODAL DETAIL -->
+  <div class="modal-overlay" id="detailModal">
+    <div class="modal" style="max-width:460px">
+      <div class="modal-header">
+        <span class="card-title">Détail de la dépense</span>
+        <button class="close-btn" onclick="closeModal('detailModal')">✕</button>
       </div>
+      <div class="modal-body" id="detailBody"></div>
+      <div class="modal-footer" id="detailFooter"></div>
     </div>
   </div>
-</div>
 
-<!-- MODAL DETAIL -->
-<div class="modal-overlay" id="detailModal">
-  <div class="modal" style="max-width:460px">
-    <div class="modal-header">
-      <span class="card-title">Détail de la dépense</span>
-      <button class="close-btn" onclick="closeModal('detailModal')">✕</button>
-    </div>
-    <div class="modal-body" id="detailBody"></div>
-    <div class="modal-footer" id="detailFooter"></div>
-  </div>
-</div>
+  <!-- TOAST -->
+  <div id="toast"></div>
 
-<!-- TOAST -->
-<div id="toast"></div>
-
-<script src="js/script.js"></script>
+  <script src="js/script.js"></script>
 </body>
+
 </html>
